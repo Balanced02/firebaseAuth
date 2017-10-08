@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { View } from 'react-native';
-import { Header, Button, CardSection, Spinner } from './components/common';
-import LoginForm from './components/LoginForm';
+import { Button, CardSection, Spinner } from './components/common';
+import Welcome from './components/Welcome';
+import LogOut from './components/LogOut';
 
 class App extends Component {
   constructor(props) {
@@ -11,6 +12,9 @@ class App extends Component {
       loggedIn: null,
     };
   }
+
+  //Component Will Mount is a lifecycle method in react that runs whatever function that you put in it when the component is about mounting
+  //Other lifecycle methods are componentDidMount, componentWillUnmount, etc...
 
   componentWillMount() {
     firebase.initializeApp({
@@ -31,17 +35,14 @@ class App extends Component {
     });
   }
 
+  //function to choose what to display on screen
   renderContent() {
     switch (this.state.loggedIn) {
       case true:
-        return (
-          <CardSection>
-            <Button onPress={() => firebase.auth().signOut()}>Log Out</Button>
-          </CardSection>
-        );
+        return <LogOut />;
 
       case false:
-        return <LoginForm />;
+        return <Welcome />;
 
       default:
         return (
@@ -52,13 +53,10 @@ class App extends Component {
     }
   }
 
+  //all react class component must  have a render function which renders and returns JSX which renders what's in it on the screen...
+
   render() {
-    return (
-      <View>
-        <Header headerText={'Authentication'} />
-        {this.renderContent()}
-      </View>
-    );
+    return <View>{this.renderContent()}</View>;
   }
 }
 
